@@ -13,16 +13,6 @@ app.use(bodyParser.json());   //middle ware will parse the body of http request
 
 // Cors middleware
 app.use(cors()) ;
-
-
-
-//********* ROUTE HANDLERS ********* 
-
-//List routes 
-/* 
---GET /lists
---purpose - get all lists
-*/
 app.get('/tasks', async (req, res) => {
     try {
       const tasks = await Task.find();
@@ -31,10 +21,6 @@ app.get('/tasks', async (req, res) => {
       res.status(500).json({ error: 'Error fetching tasks' });
     }
   });
-/* 
--- POST /lists
--- purpose- Create New List
-*/ 
 
 app.post('/tasks', async (req, res) => {
     const taskData = req.body;
@@ -68,10 +54,7 @@ app.post('/tasks', async (req, res) => {
 
 
 
-/*  
---path /lists/:id
---Purpose Get single list by ID and update it
-*/
+
 
 
 app.patch('/tasks/:id', async (req, res) => {
@@ -90,12 +73,14 @@ app.patch('/tasks/:id', async (req, res) => {
 });
 
 
-if(process.env.NODE_ENV = "production"){
-  app.use(express.static("client/dist"));
-}
+
+
+app.get("/", (req, res) => res.type('html').send(html));
 
 
 
+
+const html = `Hello!`
 
 app.listen(port, ()=>{
      console.log("Server is listening at port 3000");
