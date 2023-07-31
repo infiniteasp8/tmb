@@ -16,7 +16,7 @@ app.use(cors()) ;
 app.get('/tasks', async (req, res) => {
     try {
       const tasks = await Task.find();
-      res.json(tasks);
+      res.send(tasks);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching tasks' });
     }
@@ -32,9 +32,9 @@ app.post('/tasks', async (req, res) => {
     try {
       const newTask = new Task(taskData);
       await newTask.save();
-      res.status(201).json(newTask);
+      res.status(201).send(newTask);
     } catch (error) {
-      res.status(500).json({ error: 'Error creating task' });
+      res.status(500).send({ error: 'Error creating task' });
     }
   });
 
@@ -44,11 +44,11 @@ app.post('/tasks', async (req, res) => {
     try {
       const deletedTask = await Task.findByIdAndRemove(taskId);
       if (!deletedTask) {
-        return res.status(404).json({ error: 'Task not found' });
+        return res.status(404).send({ error: 'Task not found' });
       }
       res.json({ message: 'Task deleted successfully', deletedTask });
     } catch (error) {
-      res.status(500).json({ error: 'Error deleting task' });
+      res.status(500).send({ error: 'Error deleting task' });
     }
   });
 
@@ -64,11 +64,11 @@ app.patch('/tasks/:id', async (req, res) => {
   try {
     const updatedTask = await Task.findByIdAndUpdate(taskId, updatedTaskData, { new: true });
     if (!updatedTask) {
-      return res.status(404).json({ error: 'Task not found' });
+      return res.status(404).send({ error: 'Task not found' });
     }
     res.json({ message: 'Task updated successfully', updatedTask });
   } catch (error) {
-    res.status(500).json({ error: 'Error updating task' });
+    res.status(500).send({ error: 'Error updating task' });
   }
 });
 
