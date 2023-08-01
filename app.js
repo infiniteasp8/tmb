@@ -13,14 +13,28 @@ app.use(bodyParser.json());   //middle ware will parse the body of http request
 
 // Cors middleware
 app.use(cors()) ;
+
+
+
+//********* ROUTE HANDLERS ********* 
+
+//List routes 
+/* 
+--GET /lists
+--purpose - get all lists
+*/
 app.get('/tasks', async (req, res) => {
     try {
       const tasks = await Task.find();
-      res.send(tasks);
+      res.json(tasks);
     } catch (error) {
       res.status(500).json({ error: 'Error fetching tasks' });
     }
   });
+/* 
+-- POST /lists
+-- purpose- Create New List
+*/ 
 
 app.post('/tasks', async (req, res) => {
     const taskData = req.body;
@@ -32,9 +46,9 @@ app.post('/tasks', async (req, res) => {
     try {
       const newTask = new Task(taskData);
       await newTask.save();
-      res.status(201).send(newTask);
+      res.status(201).json(newTask);
     } catch (error) {
-      res.status(500).send({ error: 'Error creating task' });
+      res.status(500).json({ error: 'Error creating task' });
     }
   });
 
@@ -44,17 +58,20 @@ app.post('/tasks', async (req, res) => {
     try {
       const deletedTask = await Task.findByIdAndRemove(taskId);
       if (!deletedTask) {
-        return res.status(404).send({ error: 'Task not found' });
+        return res.status(404).json({ error: 'Task not found' });
       }
       res.json({ message: 'Task deleted successfully', deletedTask });
     } catch (error) {
-      res.status(500).send({ error: 'Error deleting task' });
+      res.status(500).json({ error: 'Error deleting task' });
     }
   });
 
 
 
-
+/*  
+--path /lists/:id
+--Purpose Get single list by ID and update it
+*/
 
 
 app.patch('/tasks/:id', async (req, res) => {
@@ -64,24 +81,19 @@ app.patch('/tasks/:id', async (req, res) => {
   try {
     const updatedTask = await Task.findByIdAndUpdate(taskId, updatedTaskData, { new: true });
     if (!updatedTask) {
-      return res.status(404).send({ error: 'Task not found' });
+      return res.status(404).json({ error: 'Task not found' });
     }
     res.json({ message: 'Task updated successfully', updatedTask });
   } catch (error) {
-    res.status(500).send({ error: 'Error updating task' });
+    res.status(500).json({ error: 'Error updating task' });
   }
 });
 
 
 
 
-app.get("/", (req, res) => res.type('html').send(html));
 
-
-
-
-const html = `Hello!`
 
 app.listen(port, ()=>{
-     console.log("Server is listening at port 3000");
+     console.log(`Server is listening at port ${port}`);
 });

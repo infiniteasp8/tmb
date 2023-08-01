@@ -1,15 +1,12 @@
 // this will handle connection logic to mongodb database
+require("dotenv").config();
 
 const mongoose = require('mongoose');
+mongoose
+.connect('mongodb+srv://anantsharanpandey:Anant888@cluster0.qaaibj4.mongodb.net/?retryWrites=true&w=majority')
+.then(()=> console.log(`Connected to MongoDB..`))
+.catch((err)=>console.log(err));
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://0.0.0.0:27017/TaskManager', { useNewUrlParser: true }).then(() => {
-    console.log("Connceted to Mongo Succesfully");
-}).catch((e) => {
-    console.log("Error while connecting");
-    console.log(e);
-
-});
 
 // To prevent from depreciation
 // mongoose.set('useCreateIndex', true);
